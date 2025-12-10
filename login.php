@@ -1,22 +1,28 @@
- <?php
+<?php
 session_start();
 
-$connection = new mysqli("localhost", "root", "", "smartwaste");
+$email = $_POST['email'] ?? "";
+$password = $_POST['password'] ?? "";
 
-if ($connection->connect_error) {
-    die("Connection failed: " . $connection->connect_error);
+// Simple validation
+if (empty($email) || empty($password)) {
+    echo "Please enter both email and password! <br><br>";
+    echo "<a href='profile.html'>Go Back</a>";
+    exit;
 }
+$valid_email = "test@gmail.com";
+$valid_password = "12345";
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+// Check login
+if ($email === $valid_email && $password === $valid_password) {
 
-$query = "SELECT * FROM users WHERE email='$email' AND password='$password'";
-$result = $connection->query($query);
-
-if ($result->num_rows > 0) {
-    $_SESSION['user'] = $email;
-    header("Location: index.html");
-} else {
-    echo "Invalid Login!";
+    $_SESSION['user'] = $email;   
+    header("Location: index.html"); 
+    exit;
+} 
+else {
+    echo "Invalid login! Wrong email or password.<br><br>";
+    echo "<a href='profile.html'>Try Again</a>";
 }
 ?>
+
